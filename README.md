@@ -11,3 +11,5 @@ Use command line or terminal:
 Optional argument: `path`
 
 e.g. `python remove_empty_folders.py 'C:/'`
+
+If no path is provided, script will assume current working directory as path.
