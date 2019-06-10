@@ -6,76 +6,116 @@ from functools import partial
 import os
 
 mypath = ''
-
-def remove_empty(dir_path, counter):
-    try:
-        if not os.path.isdir(dir_path):
-            return False
-
-        if all([remove_empty(os.path.join(dir_path, filename), counter) for filename in os.listdir(dir_path)]):        
-            counter[0]+=1
-            os.rmdir(dir_path)
-            counter[1]+=1
-            return True
-        else:
-            return False
-    except:
-        counter[2]+=1
-
+lista = []
 
 def func_about():
     messagebox.showinfo('Empty Folder Remover 0.1', 'Browse to a path to remove any empty directories it contains.\nRepo: https://github.com/PApostol/EmptyFolderRemover.git.\nWritten in Python 3.7. Feel free to modify and use as desired.')
 
 
-def func_dir(window, button_del):
+def find_empty(dir_path, lista):
+    try:
+        if not os.path.isdir(dir_path):
+            return False
+
+        if all([find_empty(os.path.join(dir_path, filename), lista) for filename in os.listdir(dir_path)]):        
+            lista.append(dir_path)
+            return True
+        else:
+            return False
+    except:
+        pass
+
+
+def func_dir(root, button_find, button_del):
+    button_find.config(state=DISABLED)
+    button_del.config(state=DISABLED)
+
     global mypath
     mypath = filedialog.askdirectory()
-    lbl = Label(window, text=mypath, bg='white', fg='black')
-    lbl.place(relx=0.5, rely=0.3, anchor=N)
+
+    path_label = Label(root, text=mypath, bg='white', fg='black')
+    path_label.place(relx=0.5, rely=0.2, anchor=N)
 
     if mypath:
+        button_find.config(state=NORMAL)
+
+
+def func_find(root, listbox, button_del):
+    global mypath, lista
+    find_empty(mypath, lista)
+
+    if not lista:
+        messagebox.showinfo('Finished', 'No empty directories found.')
+
+    else:
+        for dir in lista:
+            listbox.insert(END, dir)
+        
         button_del.config(state=NORMAL)
+        messagebox.showinfo('Finished', 'Empty directories found: ' + str(len(lista)))
 
 
 def func_del():
-    global mypath
-    counter = [0,0,0]
-    remove_empty(mypath, counter)
+    global lista
+    counter_del = 0
+    counter_err = 0
 
-    output = []
-    output.append('Found ' + str(counter[0]) + ' empty directories.')
-    output.append('Deleted ' + str(counter[0]) + ' empty directories.')
+    for dir in lista:
+        try:
+            os.rmdir(dir)
+        except:
+            counter_err+=1
+        else:
+            counter_del+=1
 
-    if counter[2]>0:
-        output.append('Permission to access or delete some directories was denied.')
-
-    str_out = '\n'.join(output)
+    str_out =  'Empty directories deleted: ' + str(counter_del)
+    if counter_err>0:
+        str_out+='\nPermission to access or delete some directories was denied.'
+    
     messagebox.showinfo('Finished', str_out)
 
 
 def make_gui():
-    window = Tk()
-    window.title('Empty Folder Remover 0.1')
-    window.geometry('300x200')
+    # frame
+    root = Tk()
+    root.title('Empty Folder Remover 0.1')
+    root.geometry('300x400')
+    #root.resizable(False, False)
     
-    menu = Menu(window)
+    # menu
+    menu = Menu(root)
     menu.add_cascade(label='About', command=func_about)
-    menu.add_cascade(label='Exit', command=window.destroy)
-    window.config(menu=menu)
-    
-    button_del = Button(window, text='Remove empty', bg='grey', fg='black', command=func_del)
-    button_del.place(relx=0.5, rely=0.5, anchor=N)
+    menu.add_cascade(label='Exit', command=root.destroy)
+    root.config(menu=menu)
+
+    # listbox
+    listbox = Listbox(root,width=40, height=12)
+    listbox.place(relx=0.5, rely=0.4, anchor=N)
+
+    # path label
+    #path_label = Label(root, bg='white', fg='black')
+    #path_label.place(relx=0.5, rely=0.2, anchor=N)
+
+    # remove button
+    button_del = Button(root, text='Remove empty', bg='grey', fg='black', command=func_del)
+    button_del.place(relx=0.7, rely=0.3, anchor=N)
     button_del.config(state=DISABLED)
+    
+    # find button
+    button_find = Button(root, text='Find empty', bg='grey', fg='black', command=partial(func_find, root, listbox, button_del))
+    button_find.place(relx=0.3, rely=0.3, anchor=N)
+    button_find.config(state=DISABLED)
 
-    button_dir = Button(window, text='Choose path', bg='grey', fg='black', command=partial(func_dir, window, button_del))
-    button_dir.place(relx=0.5, rely=0.1, anchor=N)
+    # path button
+    button_dir = Button(root, text='Choose path', bg='grey', fg='black', command=partial(func_dir, root, button_find, button_del))
+    button_dir.place(relx=0.5, rely=0.05, anchor=N)
 
-    window.mainloop()
+    root.mainloop()
 
 
 def main():
     try:
-        make_gui()    
+        make_gui()
     except Exception as e:
         raise e
 
