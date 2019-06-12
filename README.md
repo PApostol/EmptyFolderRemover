@@ -8,9 +8,9 @@ Depending on your user rights, some folders might not be removable, e.g. you mig
 
 ## GUI version
 
--How to use `remove_empty_folders_gui.py`:
+Just run `remove_empty_folders_gui.exe` (Windows only).
 
-Use command line or terminal:
+Or use command line/terminal:
 
 -Windows: `python remove_empty_folders_gui.py`
 
@@ -20,13 +20,11 @@ Note: the GUI version uses `tkinter`, which is not part of Python in Linux by de
 
 ## CLI version
 
--How to use `remove_empty_folders.py`:
-
 Use command line or terminal:
 
--Windows: `python remove_empty_folders.py`
+-Windows: `python remove_empty_folders_cli.py`
 
--Linux: `sudo python3 remove_empty_folders.py`
+-Linux: `sudo python3 remove_empty_folders_cli.py`
 
 Optional argument: `path`
 
@@ -43,6 +41,7 @@ Use with your own risk. No contributor is responsible for any damage caused to y
 ## Change log:
 ### 0.2.0:
 - Added list box to display empty folders before deletion
+- Added executable for GUI version
 - Various improvements & fixes
 
 ### 0.1.0:
