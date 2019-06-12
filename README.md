@@ -46,4 +46,4 @@ Use with your own risk. No contributor is responsible for any damage caused to y
 - Various improvements & fixes
 
 ### 0.1.0:
--First version
+- First version
