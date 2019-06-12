@@ -1,11 +1,13 @@
 # Empty Folder Remover
 
-Helps keeping yous system tidy by removing empty folders. Written in Python 3.7.
+Helps keeping yous system tidy by removing empty folders. Available both as a graphical user interface (GUI, better suited for Windows platforms) and a command-line interface (CLI, better suited for Linux platforms). Written in Python 3.7.
+
 Note: it is generally safe to remove empty folders, even from system directories. However, removing zero byte files is not recommended.
 
 Depending on your user rights, some folders might not be removable, e.g. you might need to be an admin to remove system folders.
 
-## GUI version - uses `tkinter`
+## GUI version
+- uses `tkinter`
 
 -How to use `remove_empty_folders_gui.py`:
 
@@ -17,7 +19,7 @@ Use command line or terminal:
 
 Note: the GUI version works better on Windows. In addition, `tkinter` is not part of Python in Linux by default. If not present, install via `sudo apt-get install python3-tk`.
 
-## CMD version
+## CLI version
 
 -How to use `remove_empty_folders.py`:
 
@@ -32,7 +34,6 @@ Optional argument: `path`
 e.g. `python remove_empty_folders.py 'C:/'`
 
 If no path is provided, script will assume current working directory as path.
-
 
 
 ## Disclaimer:
